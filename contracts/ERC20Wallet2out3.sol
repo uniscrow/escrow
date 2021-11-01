@@ -59,7 +59,7 @@ contract ERC20Wallet2out3{
         return nonce-1;
     }
     
-    function confirmTransfer(uint _nonce) external{
+    function confirmTransfer(uint _nonce) external virtual{
         require(msg.sender == alice || msg.sender == bob || msg.sender == dave, "not an owner");
         require(payouts[_nonce].initiatedBy != msg.sender, "the initiator cannot confirm");
         require(payouts[_nonce].state == State.pending, "incorrect state for payout");
