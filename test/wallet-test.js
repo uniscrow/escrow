@@ -23,7 +23,7 @@ describe("Wallet", function () {
         await tx.wait();
         //console.log(tx);
         let balance = await this.token.balanceOf(this.wallet.address);
-        console.log(balance);
+        //console.log(balance);
         expect(balance.toString()).to.equal('100',"must be 100");
     });
 
@@ -31,20 +31,20 @@ describe("Wallet", function () {
         let tx = await this.wallet.initTransfer(0,2,3);
         await tx.wait();
         let index = await this.wallet.nonce() - 1;
-        console.log(index);
+        //console.log(index);
         let payout = (await this.wallet.payouts(index));
-        console.log(payout);
+        //console.log(payout);
         expect(payout.initiatedBy).to.equal(this.alice.address);
         expect(payout.state).to.equal(PENDING);
         
         
         let walletSeenByBob = await this.wallet.connect(this.bob);
-        console.log("now connected with bob");
+        //console.log("now connected with bob");
         
         tx = await walletSeenByBob.confirmTransfer(index);
         await tx.wait();
         payout = (await this.wallet.payouts(index));
-        console.log(payout);
+        //console.log(payout);
         expect(payout.state).to.equal(COMPLETE);
         
         let bobBalance = await this.token.balanceOf(this.bob.address);
@@ -54,13 +54,29 @@ describe("Wallet", function () {
         expect(daveBalance).to.equal(3);
     });
     
+    it("Events are emitted on transfer and confirm", async function () {
+        let index = await this.wallet.nonce();
+        
+        await expect(this.wallet.initTransfer(0,2,3))
+            .to
+            .emit(this.wallet,"TransferInitiated")
+            .withArgs(this.alice.address, index);
+        
+        let walletSeenByBob = await this.wallet.connect(this.bob);
+        
+        await expect(walletSeenByBob.confirmTransfer(index))
+            .to
+            .emit(walletSeenByBob,"TransferConfirmed")
+            .withArgs(this.bob.address, index);
+    });    
+    
     it("Alice is owner can init a transfer and charlie (not owner) cannot confirm", async function () {
         let tx = await this.wallet.initTransfer(0,2,3);
         await tx.wait();
         let index = await this.wallet.nonce() - 1;
         console.log(index);
         let payout = (await this.wallet.payouts(index));
-        console.log(payout);
+        //console.log(payout);
         expect(payout.initiatedBy).to.equal(this.alice.address);
         expect(payout.state).to.equal(PENDING);
         

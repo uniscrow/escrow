@@ -29,14 +29,15 @@ contract ERC20Wallet2out3{
       State state;
    }
    
-    event Init(address initiator);
-   
+    event TransferInitiated(address, uint);
+    event TransferConfirmed(address, uint);
+    
     address alice;
     address bob;
     address dave;
     IERC20 public token;
 
-    uint public nonce = 0;   
+    uint public nonce = 0; //the index of next payment  
     Payout [] public payouts;  
     
     constructor(address _alice, address _bob, address _dave, address erc20){
@@ -52,11 +53,11 @@ contract ERC20Wallet2out3{
     }
     
 
-    function initTransfer(uint256 qtyAlice, uint256 qtyBob, uint256 qtyDave) external returns(uint){
+    function initTransfer(uint256 qtyAlice, uint256 qtyBob, uint256 qtyDave) external{
         require(msg.sender == alice || msg.sender == bob || msg.sender == dave, "not an owner");
-        nonce ++;
         payouts.push (Payout(qtyAlice, qtyBob, qtyDave, msg.sender, address(0), State.pending));
-        return nonce-1;
+        emit TransferInitiated(msg.sender, nonce);
+        nonce ++;
     }
     
     function confirmTransfer(uint _nonce) external virtual{
@@ -68,6 +69,7 @@ contract ERC20Wallet2out3{
         token.transfer(dave, payouts[_nonce].qtyDave);
         payouts[_nonce].state = State.complete;
         payouts[_nonce].cosignedBy = msg.sender;
+        emit TransferConfirmed(msg.sender, _nonce);
     }
     
 }
