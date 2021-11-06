@@ -11,19 +11,23 @@ describe("WalletFactory", function () {
         //console.log(this.alice.address);
         this.factory = await this.Factory.deploy();
         await this.factory.deployed();
-
+        console.log("factory:"+this.factory.address);
+        this.token = await this.ERC20.deploy();
+        await this.token.deployed();
+        console.log("token:"+this.token.address);
     });
     
     it("A new wallet is created", async function () {
-        await expect (this.factory
-            .create2out3Backup([this.alice,
-                            this.bob,
-                            this.dave],
-                            this.backup,
-                            this.ERC20))
+        
+        await expect(this.factory
+            .create2out3Backup([this.alice.address,
+                            this.bob.address,
+                            this.dave.address],
+                            this.backup.address,
+                            this.token.address))
             .to
-            .emit(this.factory,"NewWallet")
-            .withArgs(0);
+            .emit(this.factory,"NewWallet");
+            //.withArgs();
         
 
     });
