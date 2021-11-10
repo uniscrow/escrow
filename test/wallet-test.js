@@ -99,4 +99,5 @@ describe("Wallet", function () {
         let index = await this.wallet.nonce() - 1;
         await expect(this.wallet.confirmTransfer(index)).to.be.reverted;
     });    
+    
 });
