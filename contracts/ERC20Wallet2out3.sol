@@ -27,6 +27,7 @@ contract ERC20Wallet2out3{
    
     event TransferInitiated(address, uint);
     event TransferConfirmed(address, uint);
+    event DirectTransfer(address, uint256);
     
     address alice;
     address bob;
@@ -48,6 +49,27 @@ contract ERC20Wallet2out3{
         token = IERC20(erc20);
     }
     
+
+    /* 
+    This method allows a party to move funds to the other with a single tx.
+    This is gas-efficient and covers the use case
+    where in a 2-3 escrow the two parties under agreements are Alice and Bob
+    and Alice decides to move funds to Bob or vice versa. 
+    In such a case there is no need for the other party approval.
+    WARNING: This transfer is NOT registered in the payouts register and does not increment
+    the nonce count.
+    */
+    function directTransfer(uint256 amount) external{
+        address recipient;
+        require(msg.sender == alice || msg.sender == bob);
+        
+        if (msg.sender == alice) recipient = bob;
+        else recipient = alice;
+
+        token.transfer(recipient, amount);
+
+        emit DirectTransfer(recipient, amount);
+    }
 
     function initTransfer(uint256 qtyAlice, uint256 qtyBob, uint256 qtyDave) external{
         require(msg.sender == alice || msg.sender == bob || msg.sender == dave, "not an owner");

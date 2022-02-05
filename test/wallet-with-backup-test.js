@@ -22,7 +22,7 @@ describe("Wallet With Backup", function () {
     });
     
     beforeEach(async function () {
-        this.token = await this.ERC20.deploy();
+        this.token = await this.ERC20.deploy(100);
         await this.token.deployed();
         this.wallet = await this.Wallet.deploy(this.alice.address, this.bob.address, this.dave.address, this.backup.address, this.token.address);
         await this.wallet.deployed();

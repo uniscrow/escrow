@@ -15,7 +15,7 @@ describe("Wallet", function () {
     });
     
     beforeEach(async function () {
-        this.token = await this.ERC20.deploy();
+        this.token = await this.ERC20.deploy(100);
         await this.token.deployed();
         this.wallet = await this.Wallet.deploy(this.alice.address, this.bob.address, this.dave.address, this.token.address);
         await this.wallet.deployed();
@@ -25,6 +25,32 @@ describe("Wallet", function () {
         let balance = await this.token.balanceOf(this.wallet.address);
         //console.log(balance);
         expect(balance.toString()).to.equal('100',"must be 100");
+    });
+
+    it("Alice can command a direct transfer to Bob and vice versa", async function () {
+        let amount = 1;
+
+
+        expect(await this.token.balanceOf(this.bob.address)).to.equal(0);
+        let tx = await this.wallet.directTransfer(amount);
+        await tx.wait();
+        expect(await this.token.balanceOf(this.bob.address)).to.equal(1);
+
+        let walletSeenByBob = await this.wallet.connect(this.bob);
+        expect(await this.token.balanceOf(this.alice.address)).to.equal(0);
+        tx = await walletSeenByBob.directTransfer(amount + 1);
+        await tx.wait();
+        expect(await this.token.balanceOf(this.alice.address)).to.equal(2);
+    });
+
+    it("Nobody other Alice and Bob can command direct transfer", async function () {
+        let amount = 1;
+        
+        let walletSeenByCharlie = await this.wallet.connect(this.charlie);
+        await expect(walletSeenByCharlie.directTransfer(amount)).to.be.reverted;
+
+        let walletSeenByDave = await this.wallet.connect(this.dave);
+        await expect(walletSeenByDave.directTransfer(amount)).to.be.reverted;
     });
 
     it("Alice can init a transfer and Bob can confirm", async function () {
