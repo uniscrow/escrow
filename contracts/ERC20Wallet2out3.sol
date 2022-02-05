@@ -2,14 +2,10 @@ pragma solidity >=0.8 <0.9.0;
 
 
 interface IERC20 {
-    /**
-     * @dev Moves `amount` tokens from the caller's account to `recipient`.
-     *
-     * Returns a boolean value indicating whether the operation succeeded.
-     *
-     * Emits a {Transfer} event.
-     */
+
     function transfer(address recipient, uint256 amount) external returns (bool);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount ) external returns (bool);
 }
 
 contract ERC20Wallet2out3{
