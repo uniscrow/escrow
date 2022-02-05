@@ -4,23 +4,6 @@
 
 pragma solidity ^0.8;
 
-// Abstract contract for the full ERC 20 Token standard
-// https://github.com/ethereum/EIPs/issues/20
-
-
-
-
-
-/*
-You should inherit from StandardToken or, for a token like you would want to
-deploy in something like Mist, see HumanStandardToken.sol.
-(This implements ONLY the standard functions and NOTHING else.
-If you deploy this, you won't have anything useful.)
-
-Implements ERC 20 Token standard: https://github.com/ethereum/EIPs/issues/20
-.*/
-
-
 contract StandardToken {
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
@@ -71,15 +54,13 @@ contract StandardToken {
 }
 
 contract ERC20 is StandardToken {
-
-    
-
-    uint256 public totalSupply=1000000 * 1e18;
+ 
+    uint256 public totalSupply=0;
     string public name = "USD Test Token";  //fancy name: eg Simon Bucks
     uint8 public decimals=18;        //How many decimals to show. ie. There could 1000 base units with 3 decimals. Meaning 0.980 SBX = 980 base units. It's like comparing 1 wei to 1 ether.
     string public symbol="USDtt";     //An identifier: eg SBX
-    string public version = 'H0.3'; //human 0.1 standard. Just an arbitrary versioning scheme.
-    constructor() {
+    constructor(uint256 supply) {
+        totalSupply = supply;
         balances[msg.sender] = totalSupply;
     }
 

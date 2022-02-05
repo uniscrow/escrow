@@ -12,7 +12,7 @@ describe("WalletFactory", function () {
         this.factory = await this.Factory.deploy();
         await this.factory.deployed();
         console.log("factory:"+this.factory.address);
-        this.token = await this.ERC20.deploy();
+        this.token = await this.ERC20.deploy(100);
         await this.token.deployed();
         console.log("token:"+this.token.address);
     });
