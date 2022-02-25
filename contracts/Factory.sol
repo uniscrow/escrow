@@ -5,7 +5,11 @@ import "./ERC20Wallet2out3Managed.sol";
 
 contract Factory{
     event NewWallet(address);
+    mapping(string => address) public contracts2out3Backup;
+    mapping(string => address) public contracts2out3Managed;
+
     function create2out3Backup(
+                            string memory requestId,
                             address alice,
                             address bob,
                             address dave, 
@@ -19,11 +23,12 @@ contract Factory{
                                     dave,
                                     backup,
                                     erc20);
+        contracts2out3Backup[requestId] = address(wallet);
         emit NewWallet(address(wallet));
-
     }
 
     function create2out3Managed(
+                            string memory requestId,
                             address alice,
                             address bob,
                             address dave, 
@@ -38,6 +43,7 @@ contract Factory{
                                     dave,
                                     agent,
                                     erc20);
+        contracts2out3Managed[requestId] = address(wallet);
         emit NewWallet(address(wallet));
 
     }    
