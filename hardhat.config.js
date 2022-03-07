@@ -1,7 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ganache");
 let MNEMONICS = require("./secrets.json").mnemonics;
-let URL = require("./secrets.json").url
+let URL = require("./secrets.json").url;
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -20,18 +20,18 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
 	solidity: "0.8.4",
-  defaultNetwork: "uniscrow",
+	defaultNetwork: "uniscrow",
 	networks: {
-    // hardhat: {
-    // },
+		// hardhat: {
+		// },
 		uniscrow: {
 			url: URL,
 			accounts: {
 				mnemonic: MNEMONICS,
-        path: "m/44'/60'/0'/0",
-        initialIndex: 0,
-		networkId: "10042",
-        count: 20
+				path: "m/44'/60'/0'/0",
+				initialIndex: 0,
+				networkId: "10042",
+				count: 20,
 			},
 		},
 	},
