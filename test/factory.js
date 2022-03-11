@@ -7,7 +7,7 @@ describe("WalletFactory", function () {
     before(async function () {
         this.Factory = await ethers.getContractFactory("Factory");
         this.ERC20 = await ethers.getContractFactory("ERC20");
-        [this.alice, this.bob, this.charlie, this.dave, this.backup, this.agent] = await ethers.getSigners();
+        [this.alice, this.bob, this.charlie, this.arbitrator, this.agent] = await ethers.getSigners();
         //console.log(this.alice.address);
         this.factory = await this.Factory.deploy();
         await this.factory.deployed();
@@ -17,14 +17,13 @@ describe("WalletFactory", function () {
         console.log("token:"+this.token.address);
     });
     
-    it("A new wallet with backup is created", async function () {
+    it("A new wallet with arbitrator is created", async function () {
         
         await expect(this.factory
-            .create2out3Backup(
+            .createArbitrated(
                             this.alice.address,
                             this.bob.address,
-                            this.dave.address,
-                            this.backup.address,
+                            this.arbitrator.address,
                             this.token.address))
             .to
             .emit(this.factory,"NewWallet");
@@ -34,10 +33,9 @@ describe("WalletFactory", function () {
     it("A new wallet with managing agent is created", async function () {
         
         await expect(this.factory
-            .create2out3Managed(
+            .createManaged(
                             this.alice.address,
                             this.bob.address,
-                            this.dave.address,
                             this.agent.address,
                             this.token.address))
             .to

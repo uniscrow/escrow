@@ -14,17 +14,17 @@ describe("Wallet With Delegated Agent", function () {
 
     
     before(async function () {
-        this.Wallet = await ethers.getContractFactory("ERC20Wallet2out3Managed");
+        this.Wallet = await ethers.getContractFactory("JointWalletManaged");
         this.ERC20 = await ethers.getContractFactory("ERC20");
        
-        [this.alice, this.bob, this.charlie, this.dave, this.agent] = await ethers.getSigners();
+        [this.alice, this.bob, this.charlie, this.agent] = await ethers.getSigners();
         log(this.alice.address);
     });
     
     beforeEach(async function () {
         this.token = await this.ERC20.deploy(100);
         await this.token.deployed();
-        this.wallet = await this.Wallet.deploy(this.alice.address, this.bob.address, this.dave.address, this.agent.address, this.token.address);
+        this.wallet = await this.Wallet.deploy(this.alice.address, this.bob.address, this.agent.address, this.token.address);
         await this.wallet.deployed();
         tx = await this.token.transfer(this.wallet.address, 100);
         await tx.wait();
@@ -42,7 +42,6 @@ describe("Wallet With Delegated Agent", function () {
         await tx.wait();
         expect(await this.token.allowance(this.wallet.address,this.agent.address)).to.be.equal(0);
 
-    
     });
 
 
