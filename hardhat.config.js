@@ -2,6 +2,8 @@ require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ganache");
 let MNEMONICS = require("./secrets.json").mnemonics;
 let URL = require("./secrets.json").url;
+
+let rinkebyInfo = require("./rinkeby-secrets.json");
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -33,6 +35,10 @@ module.exports = {
 				networkId: "10042",
 				count: 20,
 			},
+		},
+		rinkeby: {
+			url: `${rinkebyInfo.url}`,
+			accounts: [`${rinkebyInfo.addressSecret}`],
 		},
 	},
 };
