@@ -1,46 +1,43 @@
 pragma solidity >=0.8 <0.9.0;
 
-import "./ERC20Wallet2out3Backup.sol";
-import "./ERC20Wallet2out3Managed.sol";
+import "./JointWalletArbitrated.sol";
+import "./JointWalletManaged.sol";
 
 contract Factory{
     event NewWallet(address);
     mapping(string => address) public contracts2out3Backup;
     mapping(string => address) public contracts2out3Managed;
 
-    function create2out3Backup(
+                            
+    function createArbitrated(
                             string memory requestId,
                             address alice,
                             address bob,
-                            address dave, 
-                            address backup, 
+                            address arbitrator, 
                             address erc20)  
                             external{
         
-        ERC20Wallet2out3Backup wallet =
-        new ERC20Wallet2out3Backup( alice, 
+        JointWalletArbitrated wallet =
+        new JointWalletArbitrated( alice, 
                                     bob, 
-                                    dave,
-                                    backup,
+                                    arbitrator,
                                     erc20);
         contracts2out3Backup[requestId] = address(wallet);
         emit NewWallet(address(wallet));
     }
 
-    function create2out3Managed(
+    function createManaged(
                             string memory requestId,
                             address alice,
                             address bob,
-                            address dave, 
                             address agent, 
                             address erc20)  
                             external{
         
-        ERC20Wallet2out3Managed wallet =
-        new ERC20Wallet2out3Managed( 
+        JointWalletManaged wallet =
+        new JointWalletManaged( 
                                     alice, 
                                     bob, 
-                                    dave,
                                     agent,
                                     erc20);
         contracts2out3Managed[requestId] = address(wallet);
