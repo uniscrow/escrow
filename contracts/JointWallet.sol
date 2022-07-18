@@ -1,10 +1,8 @@
 pragma solidity >=0.8 <0.9.0;
 
 
-interface IERC20 {
+interface IERC20Transfer {
     function transfer(address recipient, uint256 amount) external returns (bool);
-    function approve(address spender, uint256 amount) external returns (bool);
-    function transferFrom(address sender, address recipient, uint256 amount ) external returns (bool);
 }
 
 contract JointWallet{
@@ -27,7 +25,7 @@ contract JointWallet{
     
     address alice;
     address bob;
-    IERC20 public token;
+    IERC20Transfer public token;
 
     uint public nonce = 0; //the index of next payment  
     Payout [] public payouts;  
@@ -39,7 +37,7 @@ contract JointWallet{
         
         alice = _alice;
         bob   = _bob;
-        token = IERC20(erc20);
+        token = IERC20Transfer(erc20);
     }
     
 
@@ -71,15 +69,19 @@ contract JointWallet{
         nonce ++;
     }
     
-    function confirmTransfer(uint _nonce) external virtual{
-        require(msg.sender == alice || msg.sender == bob , "not an owner");
-        require(payouts[_nonce].initiatedBy != msg.sender, "the initiator cannot confirm");
-        require(payouts[_nonce].state == State.pending, "incorrect state for payout");
+    function _confirmTransfer(uint _nonce) internal{
+       require(payouts[_nonce].state == State.pending, "incorrect state for payout");
         token.transfer(alice, payouts[_nonce].qtyAlice);
         token.transfer(bob, payouts[_nonce].qtyBob);
         payouts[_nonce].state = State.complete;
         payouts[_nonce].cosignedBy = msg.sender;
         emit TransferConfirmed(msg.sender, _nonce);
+    }
+
+    function confirmTransfer(uint _nonce) external virtual{
+        require(msg.sender == alice || msg.sender == bob , "not an owner");
+        require(payouts[_nonce].initiatedBy != msg.sender, "the initiator cannot confirm");
+        _confirmTransfer(_nonce);
     }
     
 }
