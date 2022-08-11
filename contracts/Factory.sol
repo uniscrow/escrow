@@ -5,10 +5,23 @@ import "./JointWalletManaged.sol";
 
 contract Factory{
     event NewWallet(address);
-    mapping(string => address) public contracts2out3Backup;
-    mapping(string => address) public contracts2out3Managed;
+    mapping(string => address) public createArbitratedMap;
+    mapping(string => address) public createManagedMap;
 
-                            
+     function getManagedContractAddress(string memory requestId)
+        public
+        view
+        returns (address)
+    {
+        return createManagedMap[requestId];
+    }                       
+     function getArbitratedContractAddress(string memory requestId)
+        public
+        view
+        returns (address)
+    {
+        return createArbitratedMap[requestId];
+    }                       
     function createArbitrated(
                             string memory requestId,
                             address alice,
@@ -22,7 +35,7 @@ contract Factory{
                                     bob, 
                                     arbitrator,
                                     erc20);
-        contracts2out3Backup[requestId] = address(wallet);
+        createArbitratedMap[requestId] = address(wallet);
         emit NewWallet(address(wallet));
     }
 
@@ -40,7 +53,7 @@ contract Factory{
                                     bob, 
                                     agent,
                                     erc20);
-        contracts2out3Managed[requestId] = address(wallet);
+        createManagedMap[requestId] = address(wallet);
         emit NewWallet(address(wallet));
 
     }    

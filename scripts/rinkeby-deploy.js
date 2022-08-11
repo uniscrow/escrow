@@ -23,12 +23,12 @@ async function main() {
 		let balance = await provider.getBalance(account.address);
 		console.log(account.address + " " + balance.toString());
 	}
-	// const Factory = await hre.ethers.getContractFactory("Factory");
-	// const factory = await Factory.deploy();
+	const Factory = await hre.ethers.getContractFactory("Factory");
+	const factory = await Factory.deploy();
 
-	// console.log("Deploying contracts with the account:", deployer.address);
-	// await factory.deployed();
-	// console.log("Factory deployed to:", factory.address);
+	console.log("Deploying contracts with the account:", deployer.address);
+	await factory.deployed();
+	console.log("Factory deployed to:", factory.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
@@ -39,3 +39,4 @@ main()
 		console.error(error);
 		process.exit(1);
 	});
+// 0x13D292CE789597020e6B4f474b84f7e89d5F994f
