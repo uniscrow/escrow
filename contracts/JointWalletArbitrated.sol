@@ -22,12 +22,7 @@ contract JointWalletArbitrated is JointWallet{
     function confirmTransfer(uint _nonce) external override{
         require(msg.sender == alice || msg.sender == bob || msg.sender == arbitrator, "not an owner");
         require(payouts[_nonce].initiatedBy != msg.sender, "the initiator cannot confirm");
-        require(payouts[_nonce].state == State.pending, "incorrect state for payout");
-
-        token.transfer(alice, payouts[_nonce].qtyAlice);
-        token.transfer(bob, payouts[_nonce].qtyBob);
-        payouts[_nonce].state = State.complete;
-        payouts[_nonce].cosignedBy = msg.sender;
+        _confirmTransfer(_nonce);
     }
     
 }
