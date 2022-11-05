@@ -19,8 +19,10 @@ interface IERC20Decimals{
 //as a very trustable entity.
 
 contract Managed{
-    constructor( address agent, address erc20){
-        require (agent != address(0)); //agent must be not null
+    address public agent;
+    constructor( address _agent, address erc20){
+        require (_agent != address(0)); //agent must be not null
+        agent = _agent;
         uint8 decimals=IERC20Decimals(erc20).decimals();
         IERC20Approve(erc20).approve(agent, 1000000 * 10**decimals); //up to 1 million tokens
     }

@@ -23,8 +23,8 @@ contract JointWallet{
     event TransferConfirmed(address, uint);
     event DirectTransfer(address, uint256);
     
-    address alice;
-    address bob;
+    address public alice;
+    address public bob;
     IERC20Transfer public token;
 
     uint public nonce = 0; //the index of next payment  
