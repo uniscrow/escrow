@@ -39,21 +39,24 @@ contract EscrowTransaction{
 
     function release(uint256 amount) external{
         require(msg.sender == buyer, "Only buyer can release funds");
-        token.transfer(seller, amount);
+        _transfer(seller, amount);
         emit Released(amount);
     }
 
     function refund(uint256 amount) external{
         require(msg.sender == seller, "Only seller can refund");
-        token.transfer(buyer, amount);
+        _transfer(buyer, amount);
         emit Refunded(amount);
     }
 
     function settle(uint256 refunded, uint256 released) external {
         require(msg.sender == arbitrator, "Only arbitrator can settle" );
-        token.transfer(buyer, refunded);
-        token.transfer(seller, released);
+        _transfer(buyer, refunded);
+        _transfer(seller, released);
         emit Settled(refunded, released);
     }
     
+    function _transfer(address to, uint256 amount) internal {
+        token.transfer(to, amount);
+    }
 }
