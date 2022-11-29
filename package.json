@@ -1,11 +1,10 @@
 {
-  "name": "multisig wallets",
+  "name": "multisig-wallets",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha --exit --recursive"
-    
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +16,6 @@
     "chai": "^4.3.4",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.1",
-    "hardhat": "^2.6.7"
+    "hardhat": "^2.12.2"
   }
 }
