@@ -40,7 +40,7 @@ describe("Escrow", function () {
         let balanceSeller = await this.token.balanceOf(this.seller.address);
         expect(balanceSeller.toString()).to.be.equal("1");
 
-        tx = await expect(fromBuyer.refund( 1 )).to.be.reverted;
+        await expect(fromBuyer.refund( 1 )).to.be.reverted;
     });
 
     it("Seller can refund but cannot command release", async function () {
@@ -68,18 +68,26 @@ describe("Escrow", function () {
         let balanceSeller = await this.token.balanceOf(this.seller.address);
         expect(balanceSeller.toString()).to.be.equal("10");      
         
-        tx = await expect(fromArbitrator.release( 1 )).to.be.reverted;
-        tx = await expect(fromArbitrator.refund( 1 )).to.be.reverted;
+        await expect(fromArbitrator.release( 1 )).to.be.reverted;
+        await expect(fromArbitrator.refund( 1 )).to.be.reverted;
     });
 
     it("'Anyone' cannot do any action", async function () {
         let fromAnyone = await this.escrow.connect(this.anyone);
         let tx;
-        tx = await expect(fromAnyone.settle( supply - 10 , 10 )).to.be.reverted;
-        tx = await expect(fromAnyone.refund( 1 )).to.be.reverted;
-        tx = await expect(fromAnyone.release( 1 )).to.be.reverted;
+        await expect(fromAnyone.settle( supply - 10 , 10 )).to.be.reverted;
+        await expect(fromAnyone.refund( 1 )).to.be.reverted;
+        await expect(fromAnyone.release( 1 )).to.be.reverted;
     }); 
 
-    
+    it("Safe revert if request exceeds balances", async function () {
+        let tx;
+        let fromSeller = await this.escrow.connect(this.seller);
+        await expect(fromSeller.refund( supply + 1 )).to.be.reverted;
+        let fromBuyer = await this.escrow.connect(this.fromBuyer);
+        await expect(fromBuyer.release( supply + 1 )).to.be.reverted;
+        let fromArbitrator = await this.escrow.connect(this.arbitrator);
+        await expect(fromArbitrator.settle( 1 , supply )).to.be.reverted;
+    });      
 
 });

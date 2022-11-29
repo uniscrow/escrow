@@ -3,6 +3,7 @@ pragma solidity >=0.8 <0.9.0;
 
 interface IERC20Transfer {
     function transfer(address recipient, uint256 amount) external returns (bool);
+    function balanceOf(address recipient) external view returns (uint256);
 }
 
 contract EscrowTransaction{
@@ -56,7 +57,8 @@ contract EscrowTransaction{
         emit Settled(refunded, released);
     }
     
-    function _transfer(address to, uint256 amount) internal {
+    function _transfer(address to, uint256 amount) internal virtual {
+        require(amount <= token.balanceOf(address(this)), "Insufficient balance");
         token.transfer(to, amount);
     }
 }
