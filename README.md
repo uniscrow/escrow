@@ -1,13 +1,15 @@
-# Simple multisig wallet 2 out of 3 for erc20 tokens
+# Escrow transactions contracts for erc20 tokens
 
-A factory is available on testnet (rinkeby)
+It implements release, refund and settle with different authorizations levels.
+The principle is:
 
-https://rinkeby.etherscan.io/address/0xa9fbb4c6403363fab197be6da1e6bca8a30092bc#writeContract
+- only the arbitrator can invoke settle
+- only the buyer or the arbitrator can invoke release
+- only the seller or the arbitrator can invoke refund
+
+The escrow with fees allow for a fee recipient to receive a commission based on volumes and/or flat.
 
 
-# Basic Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
 
 Try running some of the following tasks:
 
