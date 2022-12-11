@@ -43,6 +43,17 @@ describe("Escrow", function () {
         await expect(fromBuyer.refund( 1 )).to.be.reverted;
     });
 
+
+    it("Buyer cannot command settle", async function () {
+        let fromBuyer = await this.escrow.connect(this.buyer);
+        await expect(fromBuyer.settle( 100, 1 )).to.be.reverted;
+    });  
+    
+    it("Seller cannot command settle", async function () {
+        let fromSeller = await this.escrow.connect(this.seller);
+        await expect(fromSeller.settle( 100, 1 )).to.be.reverted;
+    });  
+
     it("Seller can refund but cannot command release", async function () {
         let fromSeller = await this.escrow.connect(this.seller);
         let tx = await fromSeller.refund( 1 );
@@ -56,7 +67,8 @@ describe("Escrow", function () {
 
     });
 
-    it("Arbitrator can comand settle, but can't command refund nor release", async function () {
+
+    it("Arbitrator can comand settle", async function () {
         let fromArbitrator = await this.escrow.connect(this.arbitrator);
         let tx = await fromArbitrator.settle( supply - 10 , 10 );
         await tx.wait();
@@ -67,9 +79,23 @@ describe("Escrow", function () {
 
         let balanceSeller = await this.token.balanceOf(this.seller.address);
         expect(balanceSeller.toString()).to.be.equal("10");      
+    });
+
+    it("Arbitrator can also comnand release or refund", async function () {
+        let fromArbitrator = await this.escrow.connect(this.arbitrator);
+
+        let tx = await fromArbitrator.release( 1 );
+        await tx.wait();
+
+
+        let balanceSeller = await this.token.balanceOf(this.seller.address);
+        expect(balanceSeller.toString()).to.be.equal("1");      
         
-        await expect(fromArbitrator.release( 1 )).to.be.reverted;
-        await expect(fromArbitrator.refund( 1 )).to.be.reverted;
+        tx = await fromArbitrator.refund( 1 );
+        await tx.wait();
+
+        let balanceBuyer = await this.token.balanceOf(this.buyer.address);
+        expect(balanceBuyer.toString()).to.be.equal("1");
     });
 
     it("'Anyone' cannot do any action", async function () {

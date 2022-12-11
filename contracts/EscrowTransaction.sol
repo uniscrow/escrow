@@ -39,13 +39,15 @@ contract EscrowTransaction{
     
 
     function release(uint256 amount) external{
-        require(msg.sender == buyer, "Only buyer can release funds");
+        require(msg.sender == buyer || msg.sender == arbitrator, 
+        "Only buyer or trusted party can release funds");
         _transfer(seller, amount);
         emit Released(amount);
     }
 
     function refund(uint256 amount) external{
-        require(msg.sender == seller, "Only seller can refund");
+        require(msg.sender == seller || msg.sender == arbitrator, 
+        "Only seller or trusted party can command a refund");
         _transfer(buyer, amount);
         emit Refunded(amount);
     }
