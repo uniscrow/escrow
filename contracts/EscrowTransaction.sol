@@ -1,13 +1,15 @@
 pragma solidity >=0.8 <0.9.0;
 
-
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 interface IERC20Transfer {
     function transfer(address recipient, uint256 amount) external returns (bool);
     function balanceOf(address recipient) external view returns (uint256);
 }
 
 contract EscrowTransaction{
-   
+    using SafeERC20 for IERC20;
+
     event Released(uint256);
     event Refunded(uint256);
     event Settled(uint256, uint256);
@@ -17,7 +19,7 @@ contract EscrowTransaction{
     address public arbitrator;
 
 
-    IERC20Transfer public token;
+    IERC20 public token;
     
     constructor(
         address _buyer, 
@@ -34,7 +36,7 @@ contract EscrowTransaction{
         buyer = _buyer;
         seller   = _seller;
         arbitrator = _arbitrator;
-        token = IERC20Transfer(erc20);
+        token = IERC20(erc20);
     }
     
 
@@ -61,6 +63,6 @@ contract EscrowTransaction{
     
     function _transfer(address to, uint256 amount) internal virtual {
         require(amount <= token.balanceOf(address(this)), "Insufficient balance");
-        token.transfer(to, amount);
+        token.safeTransfer(to, amount);
     }
 }
