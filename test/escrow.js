@@ -23,7 +23,7 @@ describe("Escrow", function () {
             this.token.address);
         
         let rcpt = await this.escrow.deployed();
-        console.log(rcpt.deployTransaction.gasLimit);
+        //console.log(rcpt.deployTransaction.gasLimit);
         tx = await this.token.transfer(this.escrow.address, supply);
         await tx.wait();
         
