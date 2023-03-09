@@ -22,10 +22,11 @@ describe("Escrow", function () {
             this.arbitrator.address,
             this.token.address);
         
-        await this.escrow.deployed();
+        let rcpt = await this.escrow.deployed();
+        //console.log(rcpt.deployTransaction.gasLimit);
         tx = await this.token.transfer(this.escrow.address, supply);
         await tx.wait();
-        //console.log(tx);
+        
         let balance = await this.token.balanceOf(this.escrow.address);
         //console.log(balance);
         expect(balance.toString()).to.equal(""+supply);
