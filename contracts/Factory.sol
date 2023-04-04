@@ -5,7 +5,7 @@ import "./PresetManagedWithFees.sol";
 contract Factory{
     address public arbitrator;
     address public erc20;
-    address feeRecipient;
+    address public feeRecipient;
     uint256 public allowance;
     
 
