@@ -5,9 +5,6 @@ interface IERC20Approve {
     function approve(address spender, uint256 amount) external returns (bool);
 }
 
-interface IERC20Decimals{
-    function decimals() external view returns (uint8);
-}
 
 
 //Managed contracts assigns spending power to a 4th party called Agent
@@ -20,11 +17,10 @@ interface IERC20Decimals{
 
 contract Managed{
     address public agent;
-    constructor( address _agent, address erc20){
+    constructor( address _agent, address erc20, uint256 allowance){
         require (_agent != address(0)); //agent must be not null
         agent = _agent;
-        uint8 decimals=IERC20Decimals(erc20).decimals();
-        IERC20Approve(erc20).approve(agent, 1000000 * 10**decimals); //up to 1 million tokens
+        IERC20Approve(erc20).approve(agent, allowance); //up to 1 million tokens
     }
 
 }
