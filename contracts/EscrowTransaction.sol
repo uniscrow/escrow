@@ -14,26 +14,24 @@ contract EscrowTransaction{
     address public buyer;
     address public seller;
     address public arbitrator;
-
-
-    IERC20 public token;
+    address public erc20;
     
     constructor(
         address _buyer, 
         address _seller, 
         address _arbitrator,
-        address erc20){
+        address _erc20){
         //no address can be null
         require (_buyer != address(0));
         require (_seller   != address(0));
         require (_arbitrator != address(0));
 
-        require (erc20  != address(0));
+        require (_erc20  != address(0));
         
         buyer = _buyer;
         seller   = _seller;
         arbitrator = _arbitrator;
-        token = IERC20(erc20);
+        erc20 = _erc20;
     }
     
 
@@ -59,6 +57,7 @@ contract EscrowTransaction{
     }
     
     function _transfer(address to, uint256 amount) internal virtual {
+        IERC20 token = IERC20(erc20);
         require(amount <= token.balanceOf(address(this)), "Insufficient balance");
         token.safeTransfer(to, amount);
     }
