@@ -2,7 +2,7 @@
  *Submitted for verification at Etherscan.io on 2018-05-31
 */
 
-pragma solidity ^0.8;
+pragma solidity 0.8.18;
 
 contract StandardToken {
 
