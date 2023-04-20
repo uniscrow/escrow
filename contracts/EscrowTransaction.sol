@@ -11,10 +11,10 @@ contract EscrowTransaction{
     event Refunded(uint256);
     event Settled(uint256, uint256);
     
-    address public buyer;
-    address public seller;
-    address public arbitrator;
-    address public erc20;
+    address public immutable buyer;
+    address public immutable seller;
+    address public immutable arbitrator;
+    address public immutable erc20;
     
     constructor(
         address _buyer, 

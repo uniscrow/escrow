@@ -3,9 +3,9 @@ import "./PresetManagedWithFees.sol";
 
 
 contract Factory{
-    address public arbitrator;
-    address public erc20;
-    address public feeRecipient;
+    address public immutable arbitrator;
+    address public immutable erc20;
+    address public immutable feeRecipient;
     
 
     event EscrowCreated(address);

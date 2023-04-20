@@ -16,7 +16,7 @@ interface IERC20Approve {
 //as a very trustable entity.
 
 contract Managed{
-    address public agent;
+    address public immutable agent;
     constructor( address _agent, address erc20, uint256 allowance){
         require (_agent != address(0)); //agent must be not null
         agent = _agent;
