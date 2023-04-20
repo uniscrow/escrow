@@ -14,6 +14,9 @@ contract Factory{
         address _arbitrator, 
         address _erc20,
         address _feeRecipient){
+            require(_arbitrator != address(0), "Invalid arbitrator address");
+            require(_erc20 != address(0), "Invalid ERC20 address");
+            require(_feeRecipient != address(0), "Invalid feeRecipient address");
             arbitrator = _arbitrator;
             erc20 = _erc20;
             feeRecipient = _feeRecipient;
