@@ -1,8 +1,9 @@
 pragma solidity 0.8.18;
 import "./PresetManagedWithFees.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 
-contract Factory{
+contract Factory is Ownable {
     address public immutable arbitrator;
     address public immutable erc20;
     address public immutable feeRecipient;
@@ -28,7 +29,7 @@ contract Factory{
         address buyer, 
         uint256 flatFee, 
         uint256 bpsFee,
-        uint256 allowance ) external{
+        uint256 allowance ) external onlyOwner {
 
         PresetManagedWithFees escrow =
             new PresetManagedWithFees(
